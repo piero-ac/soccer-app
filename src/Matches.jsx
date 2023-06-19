@@ -2,13 +2,12 @@ import { useState, useEffect } from "react";
 
 export default function Matches(props) {
   const league = props.league, season = props.season;
-  const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
   const [currentMatchday, setCurrentMatchday] = useState('Regular Season - 1');
   const [matchesData, setMatchesData] = useState([]);
   const [leagueRoundsData, setLeagueRoundsData] = useState([]);
 
   useEffect(() => {
-
+    const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
     const matchesKey = `leaguematches-l=${league}-s=${season}`;
     const roundsKey = `leaguerounds-l=${league}-s=${season}`;
 
@@ -57,7 +56,7 @@ export default function Matches(props) {
           </select>
         </form>
       </div>
-      <div className="container text-center">
+      <div className="container text-center w-50 p-3">
         {filteredMatches.length !== 0 && filteredMatches.map(match => {
           const dateObj = new Date(match.fixture.date);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
