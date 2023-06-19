@@ -42,10 +42,16 @@ header {
   font-size: 0.9rem;
 }
 
-form select {
+#league-season-form select {
   border-radius: 10px;
   padding: 3px 5px;
   font-size: 0.9rem;
+}
+
+#league-form select {
+  border-radius: 10px;
+  padding: 5px 8px;
+  font-size: 1.5rem;
 }
 
 td p {
