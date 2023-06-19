@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 
 export default function LeagueTable(props) {
   const league = props.league, season = props.season;
-  const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
+
   const [leagueTableData, setLeagueTableData] = useState([]);
 
 
   useEffect(() => {
-
+    const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
     const key = `leaguetable-l=${league}-s=${season}`;
 
     const fetchLeagueTableData = async () => {
@@ -47,7 +47,7 @@ export default function LeagueTable(props) {
   return (
     <>
       <h2>Table</h2>
-      <div className="table-responsive w-75 p-3 text-center" >
+      <div className="table-responsive w-50 p-3 text-center" >
         <table className="table table-striped table-bordered table-sm">
           <thead>
             <tr>
