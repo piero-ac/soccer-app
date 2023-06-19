@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 
 export default function TopScorers(props) {
   const league = props.league, season = props.season;
-
   const [topScorersData, setTopScorersData] = useState([]);
 
   useEffect(() => {
