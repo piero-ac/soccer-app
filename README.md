@@ -65,4 +65,4 @@ Follow these steps to get the project up and running on your local machine:
     npm run dev
     ```
 
-    This command starts the Vite development server. You can now open your browser and navigate to `http://localhost:5000` to see the project running.
+    This command starts the Vite development server. You can now open your browser and navigate to `http://localhost:5173` to see the project running.
