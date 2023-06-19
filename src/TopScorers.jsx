@@ -2,11 +2,10 @@ import { useEffect, useState } from "react";
 
 export default function TopScorers(props) {
   const league = props.league, season = props.season;
-  const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
   const [topScorersData, setTopScorersData] = useState([]);
 
   useEffect(() => {
-
+    const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
     const key = `topScorers-l=${league}-s=${season}`;
     const fetchTopScorersData = async () => {
       let data;
@@ -45,7 +44,7 @@ export default function TopScorers(props) {
   return (
     <>
       <h2>Top Scorers</h2>
-      <div className="table-responsive w-75 p-3 text-center" >
+      <div className="table-responsive w-25 p-3 text-center border " >
         <table className="table table-sm">
           <thead>
             <tr>
@@ -60,13 +59,13 @@ export default function TopScorers(props) {
             {topScorersData.length > 0 && topScorersData.map((player, index) => {
               return (
                 <tr key={player.player.id}>
-                  <th scope="row">{index + 1}</th>
+                  <th className="align-middle" scope="row">{index + 1}</th>
                   <td className="name-row">
                     <p>{player.player.name}</p>
                     <div><img width="50px" height="auto" src={player.player.photo} /></div>
                   </td>
-                  <td>{player.statistics[0].goals.total}</td>
-                  <td>{player.statistics[0].goals.assists}</td>
+                  <td className="align-middle">{player.statistics[0].goals.total}</td>
+                  <td className="align-middle">{player.statistics[0].goals.assists}</td>
                 </tr>
               );
             })}

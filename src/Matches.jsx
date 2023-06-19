@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
+import Match from "./Match";
+import MatchTeam from './MatchTeam';
+import MatchScore from './MatchScore';
 
 export default function Matches(props) {
   const league = props.league, season = props.season;
-  const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
   const [currentMatchday, setCurrentMatchday] = useState('Regular Season - 1');
   const [matchesData, setMatchesData] = useState([]);
   const [leagueRoundsData, setLeagueRoundsData] = useState([]);
 
   useEffect(() => {
-
+    const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
     const matchesKey = `leaguematches-l=${league}-s=${season}`;
     const roundsKey = `leaguerounds-l=${league}-s=${season}`;
 
@@ -57,28 +59,29 @@ export default function Matches(props) {
           </select>
         </form>
       </div>
-      <div className="container text-center">
+      <div className="container text-center w-50 p-3">
         {filteredMatches.length !== 0 && filteredMatches.map(match => {
           const dateObj = new Date(match.fixture.date);
           const options = { year: 'numeric', month: 'long', day: 'numeric' };
           const formattedDate = dateObj.toLocaleDateString('en-US', options);
 
           return (
-            <div key={match.fixture.id} className="row align-items-start justify-content-between border border-secondary rounded match">
-              <div className="col-4 align-self-center match-team">
-                <div width="50px" height="50px"><img width="50px" height="50px" src={match.teams.home.logo} /></div>
-                <p>{match.teams.home.name}</p>
-              </div>
-              <div className="col-3 align-self-center match-score">
-                <p className="score">{match.score.fulltime.home}-{match.score.fulltime.away}</p>
-                <p className="date">{formattedDate}</p>
-              </div>
-              <div className="col-4 match-team">
-                <div width="50px" height="50px"><img width="50px" height="50px" src={match.teams.away.logo} /></div>
-                <p>{match.teams.away.name}</p>
-              </div>
-            </div>
-          )
+            <Match key={match.fixture.id} >
+              <MatchTeam
+                teamLogo={match.teams.home.logo}
+                teamName={match.teams.home.name}
+              />
+              <MatchScore
+                homeTeamScore={match.score.fulltime.home}
+                awayTeamScore={match.score.fulltime.away}
+                matchdate={formattedDate}
+              />
+              <MatchTeam
+                teamLogo={match.teams.away.logo}
+                teamName={match.teams.away.name}
+              />
+            </Match>
+          );
         })}
       </div>
     </>
