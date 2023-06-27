@@ -32,7 +32,7 @@ export default function LeagueTable(props) {
         localStorage.setItem(key, JSON.stringify(parsedData));
         setLeagueTableData(parsedData);
       };
-      console.log("Fetching new league table info")
+      console.log("Fetching new league table info");
       const endpoint = `https://api-football-v1.p.rapidapi.com/v3/standings?season=${season}&league=${league}`;
       fetchTableData(endpoint, parseLeagueTableData);
     }
