@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Match from "./Match";
 import MatchTeam from './MatchTeam';
 import MatchScore from './MatchScore';
 import useRapidAPI from "./hooks/use-rapidapi";
+import LeagueSeasonContext from "./store/league_season-context";
 
 export default function Matches(props) {
-  const league = props.league, season = props.season;
+  const {league, season} = useContext(LeagueSeasonContext);
   const [currentMatchday, setCurrentMatchday] = useState('Regular Season - 1');
   const [matchesData, setMatchesData] = useState([]);
   const [leagueRoundsData, setLeagueRoundsData] = useState([]);

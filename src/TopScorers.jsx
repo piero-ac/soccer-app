@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import LeagueSeasonContext from "./store/league_season-context";
 import useRapidAPI from "./hooks/use-rapidapi";
 
 export default function TopScorers(props) {
-  const league = props.league, season = props.season;
+  const {league, season} = useContext(LeagueSeasonContext);
   const [topScorersData, setTopScorersData] = useState([]);
   const {loading, error, sendRequest: fetchTopScorersData} = useRapidAPI();
 
