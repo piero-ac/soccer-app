@@ -1,50 +1,78 @@
 import { useEffect, useState } from "react";
+import useRapidAPI from "./hooks/use-rapidapi";
 
 export default function TopScorers(props) {
   const league = props.league, season = props.season;
   const [topScorersData, setTopScorersData] = useState([]);
+  const {loading, error, sendRequest: fetchTopScorersData} = useRapidAPI();
 
   useEffect(() => {
-    const RAPID_API_KEY = import.meta.env.VITE_RAPID_API_KEY;
     const key = `topScorers-l=${league}-s=${season}`;
-    const fetchTopScorersData = async () => {
-      let data;
-      const savedData = localStorage.getItem(key);
+    const savedData = localStorage.getItem(key);
 
-      if (savedData) {
-        data = JSON.parse(savedData);
-        console.log("Using cached league top scorers info");
-      } else {
-        const url = `https://api-football-v1.p.rapidapi.com/v3/players/topscorers?league=${league}&season=${season}`;
-        const options = {
-          method: 'GET',
-          headers: {
-            'X-RapidAPI-Key': RAPID_API_KEY,
-            'X-RapidAPI-Host': 'api-football-v1.p.rapidapi.com'
-          }
-        };
-
-        try {
-          const response = await fetch(url, options);
-          const result = await response.json();
-          data = result.response;
-          localStorage.setItem(key, JSON.stringify(data));
-          console.log('New league top scorers info requested');
-        } catch (error) {
-          console.error(error);
+    if(savedData) {
+      console.log("Using cached top scorers info");
+      const cachedData = JSON.parse(savedData);
+      setTopScorersData(cachedData);
+    } else {
+      const parseTopScorersData = (dataObj) => {
+        const data = dataObj.response;
+        const parsedData = [];
+        let index = 1;
+        for(let player of data) {
+          parsedData.push({
+            id: player.player.id,
+            rank: index++,
+            name: player.player.name,
+            photoURL: player.player.photo,
+            totalGoals: player.statistics[0].goals.total || 0,
+            totalAssists: player.statistics[0].goals.assists || 0
+          })
         }
+
+        localStorage.setItem(key, JSON.stringify(parsedData));
+        setTopScorersData(parsedData);
       }
-      setTopScorersData(data || []);
-    };
+      console.log("Fetching new top scorers info");
+      const endpoint = `https://api-football-v1.p.rapidapi.com/v3/players/topscorers?league=${league}&season=${season}`;
+      fetchTopScorersData(endpoint, parseTopScorersData);
+    }
+  }, [league, season, fetchTopScorersData]);
 
-    fetchTopScorersData();
+  let content = '';
 
-  }, [league, season]);
+  if(topScorersData.length > 0) {
+    content = (
+      <tbody className="table-group-divider">
+        {topScorersData.map(player => {
+          return (
+            <tr key={player.id}>
+              <th className="align-middle" scope="row">{player.rank}</th>
+              <td className="name-row">
+                <p>{player.name}</p>
+                <div><img width="50px" height="auto" src={player.photoURL} /></div>
+              </td>
+              <td className="align-middle">{player.totalGoals}</td>
+              <td className="align-middle">{player.totalAssists}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    )
+  }
+
+  if(loading) {
+    content = <tbody className="table-group-divider"><tr><th colSpan="4">Loading...</th></tr></tbody>
+  }
+
+  if(error) {
+    content = <tbody className="table-group-divider"><tr><th colSpan="4">Something went wrong...</th></tr></tbody>
+  }
 
   return (
     <>
       <h2>Top Scorers</h2>
-      <div className="table-responsive w-25 p-3 text-center border " >
+      <div className="table-responsive w-50 p-3 text-center border " >
         <table className="table table-sm">
           <thead>
             <tr>
@@ -54,22 +82,7 @@ export default function TopScorers(props) {
               <th scope="col">Assists</th>
             </tr>
           </thead>
-          <tbody className="table-group-divider">
-            {topScorersData.length === 0 && <tr><th scope="row" colSpan="4">Loading...</th></tr>}
-            {topScorersData.length > 0 && topScorersData.map((player, index) => {
-              return (
-                <tr key={player.player.id}>
-                  <th className="align-middle" scope="row">{index + 1}</th>
-                  <td className="name-row">
-                    <p>{player.player.name}</p>
-                    <div><img width="50px" height="auto" src={player.player.photo} /></div>
-                  </td>
-                  <td className="align-middle">{player.statistics[0].goals.total}</td>
-                  <td className="align-middle">{player.statistics[0].goals.assists}</td>
-                </tr>
-              );
-            })}
-          </tbody>
+          {content}
         </table>
       </div>
     </>
