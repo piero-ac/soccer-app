@@ -1,8 +1,9 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import useRapidAPI from "./hooks/use-rapidapi";
+import LeagueSeasonContext from "./store/league_season-context";
 
 export default function LeagueTable(props) {
-  const league = props.league, season = props.season;
+  const {league, season} = useContext(LeagueSeasonContext);
   const [leagueTableData, setLeagueTableData] = useState([]);
   const {loading, error, sendRequest: fetchTableData} = useRapidAPI();
 

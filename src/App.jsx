@@ -2,8 +2,10 @@ import { useState } from 'react'
 import './App.css';
 import TopScorers from './TopScorers';
 import LeagueTable from './LeagueTable';
-import Matches from './Matches';
+import Matches from './Matches/Matches';
 import Navbar from './Navbar';
+import SelectForm from './SelectForm';
+import LeagueSeasonContext from './store/league_season-context';
 
 const leagueMappings = {
   '39': 'Premier League',
@@ -23,7 +25,7 @@ function App() {
     setSelectedTab(tab);
   }
 
-  function leagueSeasonChangeHandler(season) {
+  function seasonChangeHandler(season) {
     console.log(season);
     setLeagueData((prevState) => {
       return { ...prevState, season }
@@ -39,39 +41,75 @@ function App() {
     setIsChangingLeague(false);
   }
 
+  // Decide forms to display
+  let leagueDisplayContent = "";
+  if(isChangingLeague) {
+    leagueDisplayContent = <SelectForm
+      formId={"league-form"}
+      for={"league"}
+      selectName={"league-select"}
+      selectId={"league-select"}    
+    />
+  } else {
+    leagueDisplayContent = <h1 
+      onClick={() => {
+        setIsChangingLeague(true);
+        setIsChangingLeagueSeason(false);
+      }} >
+      {leagueMappings[leagueData.league]}
+    </h1>
+  }
+
+  let seasonDisplayContent = "";
+  if(isChangingLeagueSeason) {
+    seasonDisplayContent = 
+    <SelectForm
+      formId={"league-season-form"}
+      for={"season"}
+      selectName={"league-season-select"}
+      selectId={"league-season-select"}    
+    />
+  } else {
+    seasonDisplayContent = <h3 
+      onClick={() => {
+        setIsChangingLeagueSeason(true);
+        setIsChangingLeague(false);
+      }}>
+      {`${leagueData.season}-${Number(leagueData.season) + 1}`}
+    </h3>
+  }
+
+  // Decide tab info to display
+  let mainContent = "";
+  switch(selectedTab){
+    case 'top-scorers':
+      mainContent = <TopScorers />
+      break;
+    case 'table':
+      mainContent = <LeagueTable />
+      break;
+    case 'matches' :
+      mainContent =  <Matches />
+      break;
+    default:
+      mainContent = <LeagueTable />
+  }
+
   return (
-    <>
+    <LeagueSeasonContext.Provider value={{
+      league: leagueData.league, 
+      season: leagueData.season, 
+      leagueChangeHandler, 
+      seasonChangeHandler
+    }}>
+
       <header>
-        {!isChangingLeague && <h1 onClick={() => setIsChangingLeague(true)} >{leagueMappings[leagueData.league]}</h1>}
-        {isChangingLeague &&
-          <form id="league-form">
-            <select defaultValue={leagueData.league} name="league-select" id="league-select" onChange={(e) => leagueChangeHandler(e.target.value)}>
-              <option value="39">Premier League</option>
-              <option value="135">Serie A</option>
-              <option value="61">Ligue 1</option>
-              <option value="140">La Liga</option>
-              <option value="78">Bundesliga</option>
-            </select>
-          </form>
-        }
-        {isChangingLeagueSeason &&
-          <form id="league-season-form">
-            <select defaultValue={leagueData.season} name="league-season-select" id="league-season-select" onChange={(e) => leagueSeasonChangeHandler(e.target.value)}>
-              <option value="2022">2022-2023</option>
-              <option value="2021">2021-2022</option>
-              <option value="2020">2020-2021</option>
-            </select>
-          </form>
-        }
-        {!isChangingLeagueSeason && <h3 onClick={() => setIsChangingLeagueSeason(true)}>{`${leagueData.season}-${Number(leagueData.season) + 1}`}</h3>}
+        {leagueDisplayContent}
+        {seasonDisplayContent}
         <Navbar activeTab={selectedTab} onTabClick={tabSelectionHandler} />
       </header>
-      <div className='main-content'>
-        {selectedTab === 'top-scorers' && <TopScorers league={leagueData.league} season={leagueData.season} />}
-        {selectedTab === 'table' && <LeagueTable league={leagueData.league} season={leagueData.season} />}
-        {selectedTab === 'matches' && <Matches league={leagueData.league} season={leagueData.season} />}
-      </div>
-    </>
+      <div className='main-content'>{mainContent}</div>
+    </LeagueSeasonContext.Provider>
   )
 }
 
