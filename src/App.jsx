@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import './App.css';
 import TopScorers from './TopScorers';
-import LeagueTable from './LeagueTable';
+import LeagueTable from './LeagueTable/LeagueTable';
 import Matches from './Matches/Matches';
 import Navbar from './Navbar';
 import SelectForm from './SelectForm';
@@ -108,7 +108,7 @@ function App() {
         {seasonDisplayContent}
         <Navbar activeTab={selectedTab} onTabClick={tabSelectionHandler} />
       </header>
-      <div className='main-content'>{mainContent}</div>
+      <div className="container-fluid mt-2 my-3">{mainContent}</div>
     </LeagueSeasonContext.Provider>
   )
 }
