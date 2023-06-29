@@ -2,8 +2,8 @@ import { useState, useEffect, useContext } from "react";
 import Match from "./Match";
 import MatchTeam from './MatchTeam';
 import MatchScore from './MatchScore';
-import useRapidAPI from "./hooks/use-rapidapi";
-import LeagueSeasonContext from "./store/league_season-context";
+import useRapidAPI from "../hooks/use-rapidapi";
+import LeagueSeasonContext from "../store/league_season-context";
 
 export default function Matches(props) {
   const {league, season} = useContext(LeagueSeasonContext);

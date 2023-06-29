@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './App.css';
 import TopScorers from './TopScorers';
 import LeagueTable from './LeagueTable';
-import Matches from './Matches';
+import Matches from './Matches/Matches';
 import Navbar from './Navbar';
 import SelectForm from './SelectForm';
 import LeagueSeasonContext from './store/league_season-context';
