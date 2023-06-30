@@ -1,6 +1,9 @@
 import { useEffect, useState, useContext } from "react";
-import LeagueSeasonContext from "./store/league_season-context";
-import useRapidAPI from "./hooks/use-rapidapi";
+import LeagueSeasonContext from "../store/league_season-context";
+import useRapidAPI from "../hooks/use-rapidapi";
+import Container from "../UI/Container";
+import TopScorersHeader from "./TopScorersHeader";
+import TopScorersBody from "./TopScorersBody";
 
 export default function TopScorers(props) {
   const {league, season} = useContext(LeagueSeasonContext);
@@ -43,49 +46,24 @@ export default function TopScorers(props) {
   let content = '';
 
   if(topScorersData.length > 0) {
-    content = (
-      <tbody className="table-group-divider">
-        {topScorersData.map(player => {
-          return (
-            <tr key={player.id}>
-              <th className="align-middle" scope="row">{player.rank}</th>
-              <td className="name-row">
-                <p>{player.name}</p>
-                <div><img width="50px" height="auto" src={player.photoURL} /></div>
-              </td>
-              <td className="align-middle">{player.totalGoals}</td>
-              <td className="align-middle">{player.totalAssists}</td>
-            </tr>
-          );
-        })}
-      </tbody>
-    )
+    content = <TopScorersBody topScorersData={topScorersData} loading={false} error={false} />
   }
 
   if(loading) {
-    content = <tbody className="table-group-divider"><tr><th colSpan="4">Loading...</th></tr></tbody>
+    content = <TopScorersBody loading={true} error={false} />
   }
 
   if(error) {
-    content = <tbody className="table-group-divider"><tr><th colSpan="4">Something went wrong...</th></tr></tbody>
+    content =  <TopScorersBody loading={false} error={true} />
   }
 
   return (
     <>
-      <h2>Top Scorers</h2>
-      <div className="table-responsive w-50 p-3 text-center border " >
-        <table className="table table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Goals</th>
-              <th scope="col">Assists</th>
-            </tr>
-          </thead>
-          {content}
-        </table>
-      </div>
+      <h2 className="text-center">Top Scorers</h2>
+      <Container maxWidth="sm">
+        <TopScorersHeader />
+        {content}
+      </Container>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css';
-import TopScorers from './TopScorers';
+import TopScorers from './TopScorers/TopScorers';
 import LeagueTable from './LeagueTable/LeagueTable';
 import Matches from './Matches/Matches';
 import Navbar from './Navbar';
