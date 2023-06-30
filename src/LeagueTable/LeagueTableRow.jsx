@@ -10,19 +10,19 @@ export default function LeagueTableRow(props) {
 
   return (
     <div className={rowClasses} >
-      <div className="col-5 col-md-3 d-flex px-0">
+      <div className="col-8 col-sm-6 col-md-3 d-flex px-0">
         <span className="text-dark fw-bold pe-1">{team.teamRank}</span>
         <span><img src={team.teamLogo} alt="" width="30px" height="auto"/></span>
         <span className="flex-fill">{team.teamName}</span>
       </div>
-			<div className="col col-md-1">{team.totalGamesPlayed}</div>
-			<div className="col col-md-1">{team.totalGamesWon}</div>
-			<div className="col col-md-1">{team.totalGamesDraw}</div>
-			<div className="col col-md-1">{team.totalGamesLose}</div>
+			<div className="d-none d-sm-block col-sm-1 ">{team.totalGamesPlayed}</div>
+			<div className="d-none d-sm-block col-sm-1 ">{team.totalGamesWon}</div>
+			<div className="d-none d-sm-block col-sm-1 ">{team.totalGamesDraw}</div>
+			<div className="d-none d-sm-block col-sm-1 ">{team.totalGamesLose}</div>
 			<div className="d-none d-md-block col-md-1">{team.totalGoalsFor}</div>
 			<div className="d-none d-md-block col-md-1">{team.totalGoalsAgainst}</div>
 			<div className="d-none d-md-block col-md-1">{team.totalGoalsDiff}</div>
-			<div className="col col-md-1">{team.totalPoints}</div>
+			<div className="col-4 col-sm-2 col-md-1">{team.totalPoints}</div>
 			<div className="d-none d-md-block col-md-1 p-0"><TeamForm form={team.teamForm.split("")} /></div>
     </div>
   )
