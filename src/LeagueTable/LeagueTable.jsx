@@ -3,6 +3,7 @@ import useRapidAPI from "../hooks/use-rapidapi";
 import LeagueSeasonContext from "../store/league_season-context";
 import LeagueTableHeader from "./LeagueTableHeader";
 import LeagueTableBody from "./LeagueTableBody";
+import LeagueTableLegend from "./LeagueTableLegend";
 import Container from "../UI/Container";
 
 export default function LeagueTable(props) {
@@ -60,10 +61,13 @@ export default function LeagueTable(props) {
 
   return (
     <>
-      <h2 className="text-center">League Standings</h2>
+      <h2 className="text-center">League Standings</h2>     
       <Container maxWidth="md">
         <LeagueTableHeader />
         {content}
+      </Container>
+      <Container maxWidth="sm">
+        <LeagueTableLegend />
       </Container>
     </>
   )
