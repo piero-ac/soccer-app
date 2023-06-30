@@ -56,7 +56,7 @@ export default function LeagueTable(props) {
   }
 
   if(error) {
-    content = <LeagueTableBody loading={true} error={true}/>
+    content = <LeagueTableBody loading={false} error={true}/>
   }
 
   return (
