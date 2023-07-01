@@ -24,6 +24,8 @@ header {
 
 .match-team {
   padding: 10px;
+  width: 100px;
+  min-height: 120px;
 }
 
 .match-team p {
