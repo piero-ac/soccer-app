@@ -4,6 +4,7 @@ import MatchTeam from './MatchTeam';
 import MatchScore from './MatchScore';
 import useRapidAPI from "../hooks/use-rapidapi";
 import LeagueSeasonContext from "../store/league_season-context";
+import MatchdaySelectForm from "./MatchdaySelectForm";
 import Container from "../UI/Container";
 
 export default function Matches(props) {
@@ -85,36 +86,37 @@ export default function Matches(props) {
           );
         })}
         </div>
-        
       </Container>
     );
   }
 
   if(loading) {
-    content = <div>Loading...</div>
+    content = (
+      <Container maxWidth="md">
+        <div className="d-flex justify-content-center my-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden"></span>
+          </div>
+        </div>
+        
+      </Container>
+    );
   }
 
   if(error) {
-    content = <div>Something went wrong...</div>
+    content = (
+      <Container maxWidth="md">
+        <div className="text-center">Something went wrong...</div>
+      </Container>
+    );
   }
   return (
     <>
       <Container maxWidth="sm">
-        <div className="form-container w-100 d-flex justify-content-center">
-          <div className="select-container d-flex justify-content-center">
-          <select 
-            name="league-round" 
-            id="league-round" 
-            className="form-select text-center shadow text-bg-primary" 
-            onChange={(e) => setCurrentMatchday(e.target.value)}>
-            {leagueRoundsData.length > 0 && leagueRoundsData.map((round, index) => {
-              return (<option key={`r${index + 1}`} value={round}>{round}</option>);
-            })}
-          </select>
-          </div>
-          
-        </div>
-          
+        <MatchdaySelectForm 
+          leagueRoundsData={leagueRoundsData} 
+          onChangeHandler={(e) => setCurrentMatchday(e.target.value)}
+        />
       </Container>
       <Container maxWidth="md">
         {content}
