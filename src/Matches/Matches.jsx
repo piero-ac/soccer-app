@@ -4,6 +4,7 @@ import MatchTeam from './MatchTeam';
 import MatchScore from './MatchScore';
 import useRapidAPI from "../hooks/use-rapidapi";
 import LeagueSeasonContext from "../store/league_season-context";
+import Container from "../UI/Container";
 
 export default function Matches(props) {
   const {league, season} = useContext(LeagueSeasonContext);
@@ -55,13 +56,16 @@ export default function Matches(props) {
 
   }, [league, season, fetchData]);
 
-  const filteredMatches = matchesData.filter(match => match.round === currentMatchday);
+  const filteredMatches = matchesData.filter(match => match.round === currentMatchday).sort((a,b) => {
+    return new Date(a.date) - new Date(b.date);
+  });
   let content = '';
 
   if(filteredMatches.length > 0) {
     content = (
-      <div className="container text-center w-75 p-3">
-        {filteredMatches.length !== 0 && filteredMatches.map(match => {
+      <Container maxWidth="md">
+        <div className="row my-3 d-flex justify-content-around">
+          {filteredMatches.length !== 0 && filteredMatches.map(match => {
           return (
             <Match key={match.id} >
               <MatchTeam
@@ -80,7 +84,9 @@ export default function Matches(props) {
             </Match>
           );
         })}
-      </div>
+        </div>
+        
+      </Container>
     );
   }
 
@@ -93,16 +99,27 @@ export default function Matches(props) {
   }
   return (
     <>
-      <div className="form-container">
-        <form>
-          <select name="league-round" id="league-round" onChange={(e) => setCurrentMatchday(e.target.value)}>
+      <Container maxWidth="sm">
+        <div className="form-container w-100 d-flex justify-content-center">
+          <div className="select-container d-flex justify-content-center">
+          <select 
+            name="league-round" 
+            id="league-round" 
+            className="form-select text-center shadow text-bg-primary" 
+            onChange={(e) => setCurrentMatchday(e.target.value)}>
             {leagueRoundsData.length > 0 && leagueRoundsData.map((round, index) => {
               return (<option key={`r${index + 1}`} value={round}>{round}</option>);
             })}
           </select>
-        </form>
-      </div>
-      {content}
+          </div>
+          
+        </div>
+          
+      </Container>
+      <Container maxWidth="md">
+        {content}
+      </Container>
+      
     </>
   );
 }
