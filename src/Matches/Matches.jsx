@@ -67,23 +67,24 @@ export default function Matches(props) {
       <Container maxWidth="md">
         <div className="row my-3 d-flex justify-content-around">
           {filteredMatches.length !== 0 && filteredMatches.map(match => {
-          return (
-            <Match key={match.id}  matchId={match.id}>
-              <MatchTeam
-                teamLogo={match.homeTeam.logo}
-                teamName={match.homeTeam.name}
-              />
-              <MatchScore
-                homeTeamScore={match.score.home}
-                awayTeamScore={match.score.away}
-                matchdate={match.date}
-              />
-              <MatchTeam
-                teamLogo={match.awayTeam.logo}
-                teamName={match.awayTeam.name}
-              />
-            </Match>
-          );
+            const title = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
+            return (
+              <Match key={match.id}  matchId={match.id} title={title}>
+                <MatchTeam
+                  teamLogo={match.homeTeam.logo}
+                  teamName={match.homeTeam.name}
+                />
+                <MatchScore
+                  homeTeamScore={match.score.home}
+                  awayTeamScore={match.score.away}
+                  matchdate={match.date}
+                />
+                <MatchTeam
+                  teamLogo={match.awayTeam.logo}
+                  teamName={match.awayTeam.name}
+                />
+              </Match>
+            );
         })}
         </div>
       </Container>
