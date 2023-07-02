@@ -13,8 +13,9 @@
   top: 30vh;
   left: 2.5%;
   width: 95%;
+  height: 350px;
   z-index: 100;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 @media (min-width: 768px) {
