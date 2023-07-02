@@ -68,7 +68,7 @@ export default function Matches(props) {
         <div className="row my-3 d-flex justify-content-around">
           {filteredMatches.length !== 0 && filteredMatches.map(match => {
           return (
-            <Match key={match.id} >
+            <Match key={match.id}  matchId={match.id}>
               <MatchTeam
                 teamLogo={match.homeTeam.logo}
                 teamName={match.homeTeam.name}
