@@ -80,7 +80,6 @@ export default function MatchEvents(props) {
         </div>
         {content}
       </div>
-      
     </div>
   )
 }
