@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from "react";
-import Match from "./Match";
-import MatchTeam from './MatchTeam';
-import MatchScore from './MatchScore';
+import Match from "./Match/Match";
+import MatchTeam from './Match/MatchTeam';
+import MatchScore from './Match/MatchScore';
 import useRapidAPI from "../hooks/use-rapidapi";
 import LeagueSeasonContext from "../store/league_season-context";
 import MatchdaySelectForm from "./MatchdaySelectForm";

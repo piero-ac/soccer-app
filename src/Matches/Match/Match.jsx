@@ -1,5 +1,5 @@
 import { useState } from "react";
-import MatchModal from "./MatchModal";
+import MatchModal from "../MatchModal";
 
 export default function Match(props) {
   const [showModal, setShowModal] = useState(false);

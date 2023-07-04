@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import useRapidAPI from '../hooks/use-rapidapi';
+import useRapidAPI from '../../hooks/use-rapidapi';
 import MatchEventRow from './MatchEventRow';
 
 export default function MatchEvents(props) {

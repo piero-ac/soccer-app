@@ -2,7 +2,7 @@ import { Fragment } from 'react';
 import ReactDOM  from 'react-dom';
 import Card from '../UI/Card';
 import classes from './MatchModal.module.css';
-import MatchEvents from './MatchEvents';
+import MatchEvents from './MatchEvents/MatchEvents';
 
 const Backdrop = (props) => {
   return <div className={classes.backdrop} onClick={(event) => {event.stopPropagation(); props.onClose();}} />;
