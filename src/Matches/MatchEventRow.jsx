@@ -23,7 +23,7 @@ export default function MatchEventRow(props) {
   }
 
   return (
-    <div className="row text-center mb-2 border-bottom border-2 d-flex align-items-center">
+    <div className="row text-center border-primary border-bottom border-2 mb-2 d-flex align-items-center">
       <div className="col-4 col-md-2">{time}</div>
       <div className="col-4 col-md-2"><img width="40px" height="40px" src={matchEvent.team.logo} alt=""/></div>
       <div className="col-4 col-md-3">{eventType}</div>
