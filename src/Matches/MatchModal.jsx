@@ -12,15 +12,13 @@ const ModalOverlay = (props) => {
   
   return (
     <Card className={classes.modal} >
-      <header className="text-bg-primary p-1 m-0" onClick={props.onClose}>
-        <h2 className='fs-5 mt-2'>{props.title}</h2>
+      <header className="d-flex flex-row text-bg-primary p-1 m-0 ">
+        <h2 className='fs-5 mt-2 ms-3 flex-fill'>{props.title}</h2>
+        <button className="btn btn-sm btn-secondary"onClick={(event) => {event.stopPropagation(); props.onClose();}}>Close</button>
       </header>
       <div className="p-2">
         <MatchEvents matchId={props.matchId}/>
       </div>
-      <footer className="d-flex justify-content-end p-1">
-        <button className="btn btn-primary"onClick={(event) => {event.stopPropagation(); props.onClose();}}>Close</button>
-      </footer>
     </Card>
   );
 }
