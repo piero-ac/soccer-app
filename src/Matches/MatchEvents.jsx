@@ -60,14 +60,27 @@ export default function MatchEvents(props) {
 
   return (
     <div className="container">
-      <h6 className='text-center'>Events</h6>
-      <div className="row text-center border-bottom border-2">
-        <div className="col-4 col-md-2">Time</div>
-        <div className="col-4 col-md-2">Team</div>
-        <div className="col-4 col-md-3">Event</div>
-        <div className="d-none d-md-block col-md-5">Info</div>
+      <h6 className='text-center'>
+        <a className="fs-2 link-underline link-underline-opacity-0" 
+          data-bs-toggle="collapse" 
+          href="#collapseEvents" 
+          role="button" 
+          aria-expanded="false" 
+          aria-controls="collapseEvents">
+          Events
+        </a>
+      </h6>
+      
+      <div className="collapse" id="collapseEvents">
+        <div className="row text-center border-primary border-bottom border-2 mb-2 fw-bold">
+          <div className="col-4 col-md-2">Time</div>
+          <div className="col-4 col-md-2">Team</div>
+          <div className="col-4 col-md-3">Event</div>
+          <div className="d-none d-md-block col-md-5">Info</div>
+        </div>
+        {content}
       </div>
-      {content}
+      
     </div>
   )
 }
