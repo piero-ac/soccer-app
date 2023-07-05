@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import useRapidAPI from '../../hooks/use-rapidapi';
+import TeamLineup from './TeamLineup';
 
 export default function MatchLineups(props) {
   const {matchId} = props;
@@ -33,12 +34,8 @@ export default function MatchLineups(props) {
   let content = '';
   if(matchLineupsData.length > 0){
     content = <>
-      <div>
-        {matchLineupsData[0].team.name}
-      </div>
-      <div>
-        {matchLineupsData[1].team.name}
-      </div>
+      <TeamLineup teamLineup={matchLineupsData[0]} />
+      <TeamLineup teamLineup={matchLineupsData[1]} />
     </>
   }
 
@@ -53,7 +50,7 @@ export default function MatchLineups(props) {
 
   if(error) {
     content = (
-      <div className='bg-danger text-center mt-3'>Could not fetch statistics.</div>
+      <div className='bg-danger text-center mt-3'>Could not fetch lineups.</div>
     )
   }
   
@@ -71,7 +68,7 @@ export default function MatchLineups(props) {
       </h6>
       
       <div className="collapse" id="collapseLineups">
-        <div className="d-flex flex-column align-items-center flex-sm-row justify-content-sm-around">
+        <div className="row">
           {content}
         </div>
         
