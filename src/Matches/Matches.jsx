@@ -1,9 +1,11 @@
 import { useState, useEffect, useContext } from "react";
-import Match from "./Match";
-import MatchTeam from './MatchTeam';
-import MatchScore from './MatchScore';
+import Match from "./Match/Match";
+import MatchTeam from './Match/MatchTeam';
+import MatchScore from './Match/MatchScore';
 import useRapidAPI from "../hooks/use-rapidapi";
 import LeagueSeasonContext from "../store/league_season-context";
+import MatchdaySelectForm from "./MatchdaySelectForm";
+import Container from "../UI/Container";
 
 export default function Matches(props) {
   const {league, season} = useContext(LeagueSeasonContext);
@@ -55,54 +57,72 @@ export default function Matches(props) {
 
   }, [league, season, fetchData]);
 
-  const filteredMatches = matchesData.filter(match => match.round === currentMatchday);
+  const filteredMatches = matchesData.filter(match => match.round === currentMatchday).sort((a,b) => {
+    return new Date(a.date) - new Date(b.date);
+  });
   let content = '';
 
   if(filteredMatches.length > 0) {
     content = (
-      <div className="container text-center w-75 p-3">
-        {filteredMatches.length !== 0 && filteredMatches.map(match => {
-          return (
-            <Match key={match.id} >
-              <MatchTeam
-                teamLogo={match.homeTeam.logo}
-                teamName={match.homeTeam.name}
-              />
-              <MatchScore
-                homeTeamScore={match.score.home}
-                awayTeamScore={match.score.away}
-                matchdate={match.date}
-              />
-              <MatchTeam
-                teamLogo={match.awayTeam.logo}
-                teamName={match.awayTeam.name}
-              />
-            </Match>
-          );
+      <Container maxWidth="md">
+        <div className="row my-3 d-flex justify-content-around">
+          {filteredMatches.length !== 0 && filteredMatches.map(match => {
+            const title = `${match.homeTeam.name} vs ${match.awayTeam.name}`;
+            return (
+              <Match key={match.id}  matchId={match.id} title={title}>
+                <MatchTeam
+                  teamLogo={match.homeTeam.logo}
+                  teamName={match.homeTeam.name}
+                />
+                <MatchScore
+                  homeTeamScore={match.score.home}
+                  awayTeamScore={match.score.away}
+                  matchdate={match.date}
+                />
+                <MatchTeam
+                  teamLogo={match.awayTeam.logo}
+                  teamName={match.awayTeam.name}
+                />
+              </Match>
+            );
         })}
-      </div>
+        </div>
+      </Container>
     );
   }
 
   if(loading) {
-    content = <div>Loading...</div>
+    content = (
+      <Container maxWidth="md">
+        <div className="d-flex justify-content-center my-5">
+          <div className="spinner-border text-primary" role="status">
+            <span className="visually-hidden"></span>
+          </div>
+        </div>
+        
+      </Container>
+    );
   }
 
   if(error) {
-    content = <div>Something went wrong...</div>
+    content = (
+      <Container maxWidth="md">
+        <div className="text-center">Something went wrong...</div>
+      </Container>
+    );
   }
   return (
     <>
-      <div className="form-container">
-        <form>
-          <select name="league-round" id="league-round" onChange={(e) => setCurrentMatchday(e.target.value)}>
-            {leagueRoundsData.length > 0 && leagueRoundsData.map((round, index) => {
-              return (<option key={`r${index + 1}`} value={round}>{round}</option>);
-            })}
-          </select>
-        </form>
-      </div>
-      {content}
+      <Container maxWidth="sm">
+        <MatchdaySelectForm 
+          leagueRoundsData={leagueRoundsData} 
+          onChangeHandler={(e) => setCurrentMatchday(e.target.value)}
+        />
+      </Container>
+      <Container maxWidth="md">
+        {content}
+      </Container>
+      
     </>
   );
 }
