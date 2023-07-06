@@ -23,7 +23,9 @@ export default function Matches(props) {
 
     if(savedMatchesData) {
       console.log("Using cached matches and rounds data");
-      setMatchesData({matches: savedMatchesData, rounds: savedRoundsData});
+      const matches = JSON.parse(savedMatchesData);
+      const rounds = JSON.parse(savedRoundsData)
+      setMatchesData({matches, rounds});
     } else {
       const setData = (data) => {
         const {matches, rounds} = data;
