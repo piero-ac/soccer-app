@@ -10,7 +10,7 @@ import Container from "../UI/Container";
 
 export default function Matches(props) {
   const {league, season} = useContext(LeagueSeasonContext);
-  const [currentMatchday, setCurrentMatchday] = useState('Regular Season - 1');
+  const [currentMatchday, setCurrentMatchday] = useState("Regular Season - 1");
   const [matchesData, setMatchesData] = useState({matches: [], rounds: []});
   const {loading, error, sendRequest: fetchData} = useBackend();
 
@@ -42,7 +42,7 @@ export default function Matches(props) {
   const filteredMatches = matchesData.matches.filter(match => match.round === currentMatchday).sort((a,b) => {
     return new Date(a.date) - new Date(b.date);
   });
-  let content = '';
+  let content = "";
 
   if(filteredMatches.length > 0) {
     content = (
