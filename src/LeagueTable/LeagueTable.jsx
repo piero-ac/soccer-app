@@ -1,5 +1,6 @@
 import { useEffect, useState, useContext } from "react";
-import useRapidAPI from "../hooks/use-rapidapi";
+// import useRapidAPI from "../hooks/use-rapidapi";
+import useBackend from "../hooks/use-backend";
 import LeagueSeasonContext from "../store/league_season-context";
 import LeagueTableHeader from "./LeagueTableHeader";
 import LeagueTableBody from "./LeagueTableBody";
@@ -9,7 +10,7 @@ import Container from "../UI/Container";
 export default function LeagueTable(props) {
   const {league, season} = useContext(LeagueSeasonContext);
   const [leagueTableData, setLeagueTableData] = useState([]);
-  const {loading, error, sendRequest: fetchTableData} = useRapidAPI();
+  const {loading, error, sendRequest: fetchTableData} = useBackend();
 
   useEffect(() => {
     const key = `leaguetable-l=${league}-s=${season}`;
@@ -20,26 +21,13 @@ export default function LeagueTable(props) {
       const cachedData = JSON.parse(savedData);
       setLeagueTableData(cachedData);
     } else {
-      const parseLeagueTableData = (dataObj) => {
-        const data = dataObj.response[0].league.standings[0];
-        const parsedData = [];
-      
-        for(let team of data){
-          parsedData.push({
-            teamId: team.team.id, teamRank: team.rank, teamName: team.team.name,
-            totalGamesPlayed: team.all.played, totalGamesWon: team.all.win,
-            totalGamesDraw: team.all.draw, totalGamesLose: team.all.lose,
-            totalGoalsFor: team.all.goals.for, totalGoalsAgainst: team.all.goals.against,
-            totalGoalsDiff: team.goalsDiff, totalPoints: team.points, teamForm: team.form,
-            teamLogo: team.team.logo
-          })
-        } 
-        localStorage.setItem(key, JSON.stringify(parsedData));
-        setLeagueTableData(parsedData);
+      const setData = (data) => {
+        localStorage.setItem(key, JSON.stringify(data));
+        setLeagueTableData(data);
       };
       console.log("Fetching new league table info");
-      const endpoint = `https://api-football-v1.p.rapidapi.com/v3/standings?season=${season}&league=${league}`;
-      fetchTableData(endpoint, parseLeagueTableData);
+      const endpoint = `/soccer/table/${league}/${season}`;
+      fetchTableData(endpoint, setData);
     }
 
     

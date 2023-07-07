@@ -1,25 +1,25 @@
-import { useState } from 'react'
-import './App.css';
-import TopScorers from './TopScorers/TopScorers';
-import LeagueTable from './LeagueTable/LeagueTable';
-import Matches from './Matches/Matches';
-import Navbar from './Navbar';
-import SelectForm from './SelectForm';
-import LeagueSeasonContext from './store/league_season-context';
+import { useState } from "react"
+import "./App.css";
+import TopScorers from "./TopScorers/TopScorers";
+import LeagueTable from "./LeagueTable/LeagueTable";
+import Matches from "./Matches/Matches";
+import Navbar from "./Navbar";
+import SelectForm from "./SelectForm";
+import LeagueSeasonContext from "./store/league_season-context";
 
 const leagueMappings = {
-  '39': 'Premier League',
-  '135': 'Serie A',
-  '61': 'Ligue 1',
-  '140': 'La Liga',
-  '78': 'Bundesliga'
+  "39": "Premier League",
+  "135": "Serie A",
+  "61": "Ligue 1",
+  "140": "La Liga",
+  "78": "Bundesliga"
 }
 
 function App() {
-  const [leagueData, setLeagueData] = useState({ league: '39', season: '2022' });
+  const [leagueData, setLeagueData] = useState({ league: "39", season: "2022" });
   const [isChangingLeagueSeason, setIsChangingLeagueSeason] = useState(false);
   const [isChangingLeague, setIsChangingLeague] = useState(false);
-  const [selectedTab, setSelectedTab] = useState('table');
+  const [selectedTab, setSelectedTab] = useState("table");
 
   function tabSelectionHandler(tab) {
     setSelectedTab(tab);
@@ -82,13 +82,13 @@ function App() {
   // Decide tab info to display
   let mainContent = "";
   switch(selectedTab){
-    case 'top-scorers':
+    case "top-scorers":
       mainContent = <TopScorers />
       break;
-    case 'table':
+    case "table":
       mainContent = <LeagueTable />
       break;
-    case 'matches' :
+    case "matches" :
       mainContent =  <Matches />
       break;
     default:

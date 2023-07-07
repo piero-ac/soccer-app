@@ -1,18 +1,18 @@
 import { useState, useEffect, useContext } from "react";
 import Match from "./Match/Match";
-import MatchTeam from './Match/MatchTeam';
-import MatchScore from './Match/MatchScore';
-import useRapidAPI from "../hooks/use-rapidapi";
+import MatchTeam from "./Match/MatchTeam";
+import MatchScore from "./Match/MatchScore";
+// import useRapidAPI from "../hooks/use-rapidapi";
+import useBackend from "../hooks/use-backend";
 import LeagueSeasonContext from "../store/league_season-context";
 import MatchdaySelectForm from "./MatchdaySelectForm";
 import Container from "../UI/Container";
 
 export default function Matches(props) {
   const {league, season} = useContext(LeagueSeasonContext);
-  const [currentMatchday, setCurrentMatchday] = useState('Regular Season - 1');
-  const [matchesData, setMatchesData] = useState([]);
-  const [leagueRoundsData, setLeagueRoundsData] = useState([]);
-  const {loading, error, sendRequest: fetchData} = useRapidAPI();
+  const [currentMatchday, setCurrentMatchday] = useState("Regular Season - 1");
+  const [matchesData, setMatchesData] = useState({matches: [], rounds: []});
+  const {loading, error, sendRequest: fetchData} = useBackend();
 
   useEffect(() => {
     const matchesKey = `leaguematches-l=${league}-s=${season}`;
@@ -23,44 +23,26 @@ export default function Matches(props) {
 
     if(savedMatchesData) {
       console.log("Using cached matches and rounds data");
-      setMatchesData(JSON.parse(savedMatchesData));
-      setLeagueRoundsData(JSON.parse(savedRoundsData));
+      const matches = JSON.parse(savedMatchesData);
+      const rounds = JSON.parse(savedRoundsData)
+      setMatchesData({matches, rounds});
     } else {
-      const parseMatchesData = (dataObj) => {
-        const data = dataObj.response;
-        const parsedData = [];
-
-        for(let match of data){
-          parsedData.push({
-            round: match.league.round,
-            date: new Date(match.fixture.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
-            id: match.fixture.id,
-            homeTeam: { logo: match.teams.home.logo, name: match.teams.home.name},
-            awayTeam: { logo: match.teams.away.logo, name: match.teams.away.name},
-            score: { home: match.score.fulltime.home, away: match.score.fulltime.away }
-          })
-        }
-        localStorage.setItem(matchesKey, JSON.stringify(parsedData));
-        setMatchesData(parsedData);
+      const setData = (data) => {
+        const {matches, rounds} = data;
+        localStorage.setItem(matchesKey, JSON.stringify(matches));
+        localStorage.setItem(roundsKey,JSON.stringify(rounds));
+        setMatchesData(data);
       };
-
-      const parseRoundsData = (dataObj) => {
-        const data = dataObj.response;
-        localStorage.setItem(roundsKey,JSON.stringify(data));
-        setLeagueRoundsData(data);
-      };
-
       console.log("Fetching new matches and rounds data");
-      fetchData(`https://api-football-v1.p.rapidapi.com/v3/fixtures?league=${league}&season=${season}`, parseMatchesData);
-      fetchData(`https://api-football-v1.p.rapidapi.com/v3/fixtures/rounds?league=${league}&season=${season}`, parseRoundsData);
+      fetchData(`/soccer/matches/${league}/${season}`, setData);
     }
 
   }, [league, season, fetchData]);
 
-  const filteredMatches = matchesData.filter(match => match.round === currentMatchday).sort((a,b) => {
+  const filteredMatches = matchesData.matches.filter(match => match.round === currentMatchday).sort((a,b) => {
     return new Date(a.date) - new Date(b.date);
   });
-  let content = '';
+  let content = "";
 
   if(filteredMatches.length > 0) {
     content = (
@@ -115,7 +97,7 @@ export default function Matches(props) {
     <>
       <Container maxWidth="sm">
         <MatchdaySelectForm 
-          leagueRoundsData={leagueRoundsData} 
+          leagueRoundsData={matchesData.rounds} 
           onChangeHandler={(e) => setCurrentMatchday(e.target.value)}
         />
       </Container>

@@ -1,37 +1,28 @@
 import { useEffect, useState } from 'react';
-import useRapidAPI from '../../hooks/use-rapidapi';
+// import useRapidAPI from '../../hooks/use-rapidapi';
+import useBackend from '../../hooks/use-backend';
 import MatchEventRow from './MatchEventRow';
 
 export default function MatchEvents(props) {
   const {matchId} = props;
   const [matchEventsData, setMatchEventsData] = useState([]);
-  const {loading, error, sendRequest: fetchMatchEventsData} = useRapidAPI();
+  const {loading, error, sendRequest: fetchMatchEventsData} = useBackend();
 
   useEffect(() => {
     const key = `events-mid=${matchId}`;
     const savedData = localStorage.getItem(key);
-    console.log('Applying use effect')
 
     if(savedData) {
       console.log(`Using cached match events info for ${matchId}`);
       const cachedData = JSON.parse(savedData);
       setMatchEventsData(cachedData);
     } else {
-      const parseMatchEventsData = (dataObj) => {
-        const data = dataObj.response;
-        const parsedData = [];
-        for(let event of data){
-          parsedData.push({
-            ...event, type: event.detail.includes('Substitution') ? 'Substitution' : event.type
-          })
-        }
-
-        localStorage.setItem(key, JSON.stringify(parsedData));
-        setMatchEventsData(parsedData);
+      const setData = (data) => {
+        localStorage.setItem(key, JSON.stringify(data));
+        setMatchEventsData(data);
       };
       console.log(`Fetching new match events info for ${matchId}`);
-      const endpoint = `https://api-football-v1.p.rapidapi.com/v3/fixtures/events?fixture=${matchId}`;
-      fetchMatchEventsData(endpoint, parseMatchEventsData);
+      fetchMatchEventsData(`/soccer/match/${matchId}/events`, setData);
     }
     
   }, [matchId, setMatchEventsData, fetchMatchEventsData]);

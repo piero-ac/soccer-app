@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import LeagueSeasonContext from "../store/league_season-context";
-import useRapidAPI from "../hooks/use-rapidapi";
+// import useRapidAPI from "../hooks/use-rapidapi";
+import useBackend from "../hooks/use-backend";
 import Container from "../UI/Container";
 import TopScorersHeader from "./TopScorersHeader";
 import TopScorersBody from "./TopScorersBody";
@@ -8,7 +9,7 @@ import TopScorersBody from "./TopScorersBody";
 export default function TopScorers(props) {
   const {league, season} = useContext(LeagueSeasonContext);
   const [topScorersData, setTopScorersData] = useState([]);
-  const {loading, error, sendRequest: fetchTopScorersData} = useRapidAPI();
+  const {loading, error, sendRequest: fetchTopScorersData} = useBackend();
 
   useEffect(() => {
     const key = `topScorers-l=${league}-s=${season}`;
@@ -19,27 +20,13 @@ export default function TopScorers(props) {
       const cachedData = JSON.parse(savedData);
       setTopScorersData(cachedData);
     } else {
-      const parseTopScorersData = (dataObj) => {
-        const data = dataObj.response;
-        const parsedData = [];
-        let index = 1;
-        for(let player of data) {
-          parsedData.push({
-            id: player.player.id,
-            rank: index++,
-            name: player.player.name,
-            photoURL: player.player.photo,
-            totalGoals: player.statistics[0].goals.total || 0,
-            totalAssists: player.statistics[0].goals.assists || 0
-          })
-        }
-
-        localStorage.setItem(key, JSON.stringify(parsedData));
-        setTopScorersData(parsedData);
+      const setData = (data) => {
+        localStorage.setItem(key, JSON.stringify(data));
+        setTopScorersData(data);
       }
       console.log("Fetching new top scorers info");
-      const endpoint = `https://api-football-v1.p.rapidapi.com/v3/players/topscorers?league=${league}&season=${season}`;
-      fetchTopScorersData(endpoint, parseTopScorersData);
+      const endpoint = `/soccer/topscorers/${league}/${season}`;
+      fetchTopScorersData(endpoint, setData);
     }
   }, [league, season, fetchTopScorersData]);
 
