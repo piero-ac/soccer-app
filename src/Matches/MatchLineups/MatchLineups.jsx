@@ -9,22 +9,9 @@ export default function MatchLineups(props) {
   const {loading, error, sendRequest: fetchMatchLineupsData} = useBackend();
 
   useEffect(() => {
-    const key = `lineups-mid=${matchId}`;
-    const savedData = localStorage.getItem(key);
+    const endpoint = `/soccer/match/${matchId}/lineups`;
+    fetchMatchLineupsData(endpoint, setMatchLineupsData);
 
-    if(savedData) {
-      console.log(`Using cached match lineups info for ${matchId}`);
-      const cachedData = JSON.parse(savedData);
-      setMatchLineupsData(cachedData);
-    } else {
-      const setData = (data) => {
-        localStorage.setItem(key, JSON.stringify(data));
-        setMatchLineupsData(data);
-      };
-      console.log(`Fetching new match lineups info for ${matchId}`);
-      fetchMatchLineupsData(`/soccer/match/${matchId}/lineups`, setData);
-    }
-    
   }, [matchId, setMatchLineupsData, fetchMatchLineupsData]);
   
   const {team1, team2} = matchLineupsData;

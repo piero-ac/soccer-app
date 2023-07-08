@@ -8,34 +8,15 @@ import LeagueSeasonContext from "../store/league_season-context";
 import MatchdaySelectForm from "./MatchdaySelectForm";
 import Container from "../UI/Container";
 
-export default function Matches(props) {
+export default function Matches() {
   const {league, season} = useContext(LeagueSeasonContext);
   const [currentMatchday, setCurrentMatchday] = useState("Regular Season - 1");
   const [matchesData, setMatchesData] = useState({matches: [], rounds: []});
   const {loading, error, sendRequest: fetchData} = useBackend();
 
   useEffect(() => {
-    const matchesKey = `leaguematches-l=${league}-s=${season}`;
-    const roundsKey = `leaguerounds-l=${league}-s=${season}`;
-
-    const savedMatchesData = localStorage.getItem(matchesKey);
-    const savedRoundsData = localStorage.getItem(roundsKey);
-
-    if(savedMatchesData) {
-      console.log("Using cached matches and rounds data");
-      const matches = JSON.parse(savedMatchesData);
-      const rounds = JSON.parse(savedRoundsData)
-      setMatchesData({matches, rounds});
-    } else {
-      const setData = (data) => {
-        const {matches, rounds} = data;
-        localStorage.setItem(matchesKey, JSON.stringify(matches));
-        localStorage.setItem(roundsKey,JSON.stringify(rounds));
-        setMatchesData(data);
-      };
-      console.log("Fetching new matches and rounds data");
-      fetchData(`/soccer/matches/${league}/${season}`, setData);
-    }
+    const endpoint = `/soccer/matches/${league}/${season}`;
+    fetchData(endpoint, setMatchesData);
 
   }, [league, season, fetchData]);
 

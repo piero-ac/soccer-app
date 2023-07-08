@@ -9,22 +9,8 @@ export default function MatchEvents(props) {
   const {loading, error, sendRequest: fetchMatchEventsData} = useBackend();
 
   useEffect(() => {
-    const key = `events-mid=${matchId}`;
-    const savedData = localStorage.getItem(key);
-
-    if(savedData) {
-      console.log(`Using cached match events info for ${matchId}`);
-      const cachedData = JSON.parse(savedData);
-      setMatchEventsData(cachedData);
-    } else {
-      const setData = (data) => {
-        localStorage.setItem(key, JSON.stringify(data));
-        setMatchEventsData(data);
-      };
-      console.log(`Fetching new match events info for ${matchId}`);
-      fetchMatchEventsData(`/soccer/match/${matchId}/events`, setData);
-    }
-    
+    const endpoint = `/soccer/match/${matchId}/events`;
+    fetchMatchEventsData(endpoint, setMatchEventsData);
   }, [matchId, setMatchEventsData, fetchMatchEventsData]);
 
   let content = '';
