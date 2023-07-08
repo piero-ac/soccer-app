@@ -12,22 +12,8 @@ export default function TopScorers(props) {
   const {loading, error, sendRequest: fetchTopScorersData} = useBackend();
 
   useEffect(() => {
-    const key = `topScorers-l=${league}-s=${season}`;
-    const savedData = localStorage.getItem(key);
-
-    if(savedData) {
-      console.log("Using cached top scorers info");
-      const cachedData = JSON.parse(savedData);
-      setTopScorersData(cachedData);
-    } else {
-      const setData = (data) => {
-        localStorage.setItem(key, JSON.stringify(data));
-        setTopScorersData(data);
-      }
-      console.log("Fetching new top scorers info");
       const endpoint = `/soccer/topscorers/${league}/${season}`;
-      fetchTopScorersData(endpoint, setData);
-    }
+      fetchTopScorersData(endpoint, setTopScorersData);
   }, [league, season, fetchTopScorersData]);
 
   let content = '';
