@@ -9,22 +9,8 @@ export default function MatchStatistics(props) {
   const {loading, error, sendRequest: fetchMatchStatisticsData} = useBackend();
 
   useEffect(() => {
-    const key = `stats-mid=${matchId}`;
-    const savedData = localStorage.getItem(key);
-
-    if(savedData) {
-      console.log(`Using cached match stats info for ${matchId}`);
-      const cachedData = JSON.parse(savedData);
-      setMatchStatisticsData(cachedData);
-    } else {
-      const setData = (data) => {
-        localStorage.setItem(key, JSON.stringify(data));
-        setMatchStatisticsData(data);
-      };
-      console.log(`Fetching new match stats info for ${matchId}`);
-      fetchMatchStatisticsData(`/soccer/match/${matchId}/stats`, setData);
-    }
-    
+      const endpoint = `/soccer/match/${matchId}/stats`;
+      fetchMatchStatisticsData(endpoint, setMatchStatisticsData);
   }, [matchId, setMatchStatisticsData, fetchMatchStatisticsData]);
 
   let content = "";
