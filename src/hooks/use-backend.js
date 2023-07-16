@@ -9,7 +9,9 @@ const useBackend = () => {
 		setError(null);
 
 		try {
-			const response = await fetch(endpoint);
+			const response = await fetch(
+				"https://soccer-app-backend.onrender.com" + endpoint
+			);
 
 			if (!response.ok) {
 				throw new Error("Request failed!");
