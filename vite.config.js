@@ -11,7 +11,7 @@ export default defineConfig({
 	},
 	server: {
 		proxy: {
-			"/soccer": "http://localhost:3000",
+			"/soccer": "https://soccer-app-backend.onrender.com",
 		},
 	},
 });
